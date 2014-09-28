@@ -1,0 +1,49 @@
+The code for bookmark export is located in
+android/src/org/coolreader/crengine/BookInfo.java
+
+Here's a quick recap:
+
+1.  the file's encoding is UTF-8, with BOM. It uses CRLN line terminators;
+
+2.  the file starts with a header of the following format:
+
+        # Cool Reader 3 - exported bookmarks
+        # file name: %filename%
+        # file path: %path to file%
+        # book title: %book's title%
+        # author: %book's authors%
+        # series: %series' info%
+
+    There is a single empty line after the header;
+
+3.  only comments and corrections are being exported;
+
+4.  the position and the type of bookmark is dumped:
+
+        ## %pos% - comment
+    or
+        ## %pos% - correction
+
+    %pos% is of format %.2f%% (see printf(3));
+
+5.  if section title is present, the following line is emitted:
+
+        ## %title%
+
+    In practice, it seems like the title is never absent, but it might be empty;
+
+6.  if some text was selected for a bookmark, the following line is emitted:
+
+        << %text%
+
+    In practice, *the only way* to create a bookmark is to select some text, so
+    I can't see any way for that field to be empty;
+
+7.  if there is a comment for this bookmark, the following line is emitted:
+
+        >> %comment%
+
+    In practice, if user didn't supply eny comment, empty line is used insted of
+    it;
+
+8.  the file ends with an empty line.
