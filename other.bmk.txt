@@ -1,0 +1,12 @@
+﻿# Cool Reader 3 - exported bookmarks
+# file name: Foer. Moonwalking with Einstein.epub
+# file path: /sdcard/Books/non-fiction
+# book title: Moonwalking With Einstein
+# author: Joshua Foer
+# series: 
+
+## 1.22% - comment
+## 
+<< this is a text
+>> and this is a comment
+
