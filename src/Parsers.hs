@@ -15,7 +15,8 @@ import Bookmark
 
 pBookmarksFile :: Parser [Bookmark]
 pBookmarksFile = do
-  pBom -- FIXME: parse zero or one time
+  -- skip BOM if it's there, do nothing otherwise
+  option () pBom
   pBookmarksHeader
   bmks <- many' pBookmark
   endOfInput
