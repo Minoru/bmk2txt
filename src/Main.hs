@@ -25,7 +25,18 @@ instance Show Bookmark where
 pBookmarksFile :: Parser [Bookmark]
 pBookmarksFile = do
   pBom
+  pBookmarksHeader
   return [] -- bmks
 
 pBom :: Parser ()
 pBom = void $ string "\xfeff"
+
+pBookmarksHeader :: Parser ()
+pBookmarksHeader = void $ do
+  string "# Cool Reader 3 - exported bookmarks" >> endOfLine
+  string "# file name: " >> skipWhile (not . isEndOfLine) >> endOfLine
+  string "# file path: " >> skipWhile (not . isEndOfLine) >> endOfLine
+  string "# book title: " >> skipWhile (not . isEndOfLine) >> endOfLine
+  string "# author: " >> skipWhile (not . isEndOfLine) >> endOfLine
+  string "# series: " >> skipWhile (not . isEndOfLine) >> endOfLine
+  endOfLine
