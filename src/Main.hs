@@ -23,9 +23,9 @@ data Bookmark = Bookmark {
   }
 
 instance Show Bookmark where
-  show bmk = T.unpack $ if not . T.null $ comment bmk
-    then T.concat [ text bmk, " (", comment bmk, ")" ]
-    else text bmk
+  show bmk = T.unpack $ if T.null (comment bmk)
+    then text bmk
+    else T.concat [ text bmk, " (", comment bmk, ")" ]
 
 pBookmarksFile :: Parser [Bookmark]
 pBookmarksFile = do
@@ -41,37 +41,43 @@ pBom = void $ string "\xfeff"
 pBookmarksHeader :: Parser ()
 pBookmarksHeader = void $ do
   "# Cool Reader 3 - exported bookmarks" *> endOfLine
-  "# file name: " *> skipWhile (not . isEndOfLine) >> endOfLine
-  "# file path: " *> skipWhile (not . isEndOfLine) >> endOfLine
-  "# book title: " *> skipWhile (not . isEndOfLine) >> endOfLine
-  "# author: " *> skipWhile (not . isEndOfLine) >> endOfLine
-  "# series: " *> skipWhile (not . isEndOfLine) >> endOfLine
+  "# file name: " *> pSkipLine >> endOfLine
+  "# file path: " *> pSkipLine >> endOfLine
+  "# book title: " *> pSkipLine >> endOfLine
+  "# author: " *> pSkipLine >> endOfLine
+  "# series: " *> pSkipLine >> endOfLine
   endOfLine
 
 pBookmark :: Parser Bookmark
 pBookmark = do
   -- ## %pos% - comment
   string "## "
-  pos <- double
+  _ <- double
   string "% - comment"
   endOfLine
 
   -- ## %title%
   string "## "
-  skipWhile (not . isEndOfLine)
+  pSkipLine
   endOfLine
 
   -- << %text%
   string "<< "
-  text <- takeWhile (not . isEndOfLine)
+  text <- pLine
   endOfLine
 
   -- >> %comment%
   string ">> "
-  comment <- takeWhile (not . isEndOfLine)
+  comment <- pLine
   endOfLine
 
   -- extra newline at the end
   endOfLine
 
   return $ Bookmark text comment
+
+pLine :: Parser T.Text
+pLine = takeWhile (not . isEndOfLine)
+
+pSkipLine :: Parser ()
+pSkipLine = skipWhile (not . isEndOfLine)
