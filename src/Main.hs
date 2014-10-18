@@ -12,7 +12,9 @@ import Prelude hiding (takeWhile)
 main :: IO ()
 main = do
   file <- TIO.readFile "./test.bmk.txt"
-  print $ parseOnly pBookmarksFile file
+  case parseOnly pBookmarksFile file of
+    Left err -> print err
+    Right res -> mapM_ print res
 
 data Bookmark = Bookmark {
     text    :: T.Text
