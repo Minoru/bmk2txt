@@ -7,6 +7,8 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 import Control.Monad
 
+import Prelude hiding (takeWhile)
+
 main :: IO ()
 main = do
   file <- TIO.readFile "./test.bmk.txt"
@@ -26,7 +28,9 @@ pBookmarksFile :: Parser [Bookmark]
 pBookmarksFile = do
   pBom
   pBookmarksHeader
-  return [] -- bmks
+  bmks <- many' pBookmark
+  endOfInput
+  return bmks
 
 pBom :: Parser ()
 pBom = void $ string "\xfeff"
@@ -40,3 +44,31 @@ pBookmarksHeader = void $ do
   string "# author: " >> skipWhile (not . isEndOfLine) >> endOfLine
   string "# series: " >> skipWhile (not . isEndOfLine) >> endOfLine
   endOfLine
+
+pBookmark :: Parser Bookmark
+pBookmark = do
+  -- ## %pos% - comment
+  string "## "
+  pos <- double
+  string "% - comment"
+  endOfLine
+
+  -- ## %title%
+  string "## "
+  skipWhile (not . isEndOfLine)
+  endOfLine
+
+  -- << %text%
+  string "<< "
+  text <- takeWhile (not . isEndOfLine)
+  endOfLine
+
+  -- >> %comment%
+  string ">> "
+  comment <- takeWhile (not . isEndOfLine)
+  endOfLine
+
+  -- extra newline at the end
+  endOfLine
+
+  return $ Bookmark text comment
