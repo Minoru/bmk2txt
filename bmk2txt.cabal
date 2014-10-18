@@ -19,6 +19,7 @@ cabal-version:       >=1.10
 executable bmk2txt
   hs-source-dirs:      src
   main-is:             Main.hs
+  ghc-options:         -O2
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.6 && <4.7
