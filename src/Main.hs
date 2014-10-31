@@ -1,5 +1,6 @@
 module Main where
 
+import Control.Lens hiding (argument)
 import Control.Monad
 import Data.Attoparsec.Text
 import System.Console.Docopt
@@ -40,6 +41,4 @@ process do_strip path = do
       forM_ res $ print . (if do_strip then stripchars else id)
 
 stripchars :: Bookmark -> Bookmark
-stripchars bmk@(Bookmark text' _) = bmk {
-    text = T.dropAround (`elem` " .,!?“”«»‘’—–- ()[]:;") text'
-  }
+stripchars = over text (T.dropAround (`elem` " .,!?“”«»‘’—–- ()[]:;"))
