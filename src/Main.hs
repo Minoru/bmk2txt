@@ -28,11 +28,18 @@ main = do
     putStrLn ("bmk2txt " ++ V.showVersion version)
     exitWith ExitSuccess
 
-  mapM_ process $ args `getAllArgs` (argument "FILE")
+  let doStrip = args `isPresent` (longOption "strip")
+  mapM_ (process doStrip) $ args `getAllArgs` (argument "FILE")
 
-process :: FilePath -> IO ()
-process path = do
+process :: Bool -> FilePath -> IO ()
+process do_strip path = do
   file <- TIO.readFile path
   case parseOnly pBookmarksFile file of
     Left err -> print err
-    Right res -> mapM_ print res
+    Right res ->
+      forM_ res $ print . (if do_strip then stripchars else id)
+
+stripchars :: Bookmark -> Bookmark
+stripchars bmk@(Bookmark text' _) = bmk {
+    text = T.dropAround (`elem` " .,!?“”«»‘’—–- ()[]:;") text'
+  }
