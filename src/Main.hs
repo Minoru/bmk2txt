@@ -17,9 +17,7 @@ import Usage
 
 main :: IO ()
 main = do
-  arguments <- getArgs
-  args <- (if null arguments then withArgs ["--help"] else id)
-          (return arguments >>= optionsWithUsage usage)
+  args <- getArgs >>= optionsWithUsage usage
 
   when (args `isPresent` (longOption "help")) $ do
     TIO.putStrLn $ T.pack usage
