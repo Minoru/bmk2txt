@@ -4,9 +4,11 @@ bmk2txt is a converter from CoolReader's bookmark files to simple text files
 
 The output looks like this:
 
-> tawdry
-> sponging off (...someone)
-> Major System (remembering numbers)
+```
+tawdry
+sponging off (...someone)
+Major System (remembering numbers)
+```
 
 The thing you bookmarked is printed out, and if you supplied a comment, it will
 be put into parentheses and printed out as well. Clean and simple, isn't it?
