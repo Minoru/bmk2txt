@@ -18,6 +18,8 @@ usage = mode
   "bmk2txt"
   Arguments {
       _strip                = False
+    , _stripChars           = ""
+    , _stripCharsAdditional = ""
     , _help                 = False
     , _version              = False
     , _files                = []
@@ -28,6 +30,16 @@ usage = mode
       ["strip", "s"]
       (strip .~ True)
       ("Strip characters from the beginning and the end of the bookmarked text. The following ones are stripped by default: " ++ charsToStrip)
+  , flagReq
+      ["strip-chars"]
+      (\chars args -> Right $ (stripChars .~ T.pack chars) args)
+      "CHARS"
+      "Characters to strip"
+  , flagReq
+      ["strip-chars-additional"]
+      (\chars args -> Right $ (stripCharsAdditional .~ T.pack chars) args)
+      "CHARS"
+      "Characters to strip, in addition to the default ones"
 
   , flagNone
       ["help", "h"]

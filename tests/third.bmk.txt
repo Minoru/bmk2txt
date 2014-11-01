@@ -1,0 +1,27 @@
+﻿# Cool Reader 3 - exported bookmarks
+# file name: Author. Title
+# file path: /sdcard/Books/
+# book title: Title
+# author: Author Name
+# series: 
+
+## 1.22% - comment
+## 
+<< this is a text?!
+>> and this is a comment
+
+## 1.22% - comment
+## 
+<< this is a text–»
+>> and this is a comment
+
+## 1.22% - comment
+## 
+<< “this is a text”—
+>> and this is a comment
+
+## 1.22% - comment
+## 
+<< this is a text...
+>> and this is a comment
+

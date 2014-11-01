@@ -30,15 +30,23 @@ main = do
     putStrLn ("bmk2txt " ++ V.showVersion P.version)
     exitWith ExitSuccess
 
-  mapM_ (process (args^.strip)) (map T.unpack $ args^.files)
+  mapM_
+    (process
+      (args^.strip)
+      (args^.stripChars)
+      (args^.stripCharsAdditional))
+    (map T.unpack $ args^.files)
 
-process :: Bool -> FilePath -> IO ()
-process do_strip path = do
+process :: Bool -> T.Text -> T.Text -> FilePath -> IO ()
+process do_strip specific additional path = do
   file <- TIO.readFile path
   case parseOnly pBookmarksFile file of
     Left err -> print err
-    Right res ->
-      forM_ res $ print . (if do_strip then stripchars else id)
+    Right res -> do
+      let chars = if T.null specific
+          then charsToStrip ++ T.unpack additional
+          else T.unpack specific
+      forM_ res $ print . (if do_strip then stripchars chars else id)
 
-stripchars :: Bookmark -> Bookmark
-stripchars = over text (T.dropAround (`elem` charsToStrip))
+stripchars :: [Char] -> Bookmark -> Bookmark
+stripchars chars = over text (T.dropAround (`elem` chars))
