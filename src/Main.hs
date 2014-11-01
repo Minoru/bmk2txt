@@ -3,32 +3,34 @@ module Main where
 import Control.Lens hiding (argument)
 import Control.Monad
 import Data.Attoparsec.Text
-import System.Console.Docopt
-import System.Environment
+import System.Console.CmdArgs.Explicit hiding (process)
 import System.Exit
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 import qualified Data.Version as V
 
+import Arguments
 import Bookmark
 import Parsers
-import Paths_bmk2txt (version)
 import Usage
+import qualified Paths_bmk2txt as P
 
 main :: IO ()
 main = do
-  args <- getArgs >>= optionsWithUsage usage
+  args <- processArgs usage
 
-  when (args `isPresent` (longOption "help")) $ do
-    TIO.putStrLn $ T.pack usage
+  -- Show help in either of those cases:
+  -- * --help is passed
+  -- * --version is not passed and no files are specified
+  when (args^.help || (not $ args^.version) && (null $ args^.files)) $ do
+    print $ helpText [] HelpFormatDefault usage
     exitWith ExitSuccess
 
-  when (args `isPresent` (longOption "version")) $ do
-    putStrLn ("bmk2txt " ++ V.showVersion version)
+  when (args^.version) $ do
+    putStrLn ("bmk2txt " ++ V.showVersion P.version)
     exitWith ExitSuccess
 
-  let doStrip = args `isPresent` (longOption "strip")
-  mapM_ (process doStrip) $ args `getAllArgs` (argument "FILE")
+  mapM_ (process (args^.strip)) (map T.unpack $ args^.files)
 
 process :: Bool -> FilePath -> IO ()
 process do_strip path = do
@@ -39,4 +41,4 @@ process do_strip path = do
       forM_ res $ print . (if do_strip then stripchars else id)
 
 stripchars :: Bookmark -> Bookmark
-stripchars = over text (T.dropAround (`elem` " .,!?“”«»‘’—–- ()[]:;"))
+stripchars = over text (T.dropAround (`elem` charsToStrip))
