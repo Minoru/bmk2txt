@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                bmk2txt
-version:             1.0.0.0
+version:             1.0.0.1
 synopsis:            Converts CoolReader's exported bookmarks (bmk.txt files) into plain(er) text
 -- description:         
 homepage:            https://github.com/minoru/bmk2txt
@@ -22,7 +22,7 @@ executable bmk2txt
   ghc-options:         -O2
   -- other-modules:       
   -- other-extensions:    
-  build-depends:       base >=4.6 && <4.7
+  build-depends:       base == 4.*
                      , text == 1.*
                      , attoparsec == 0.12.*
                      , cmdargs == 0.10.*
