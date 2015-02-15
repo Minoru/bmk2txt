@@ -50,16 +50,16 @@ pBookmark = do
 
   -- << %text%
   string "<< "
-  text <- pLine
-  endOfLine
+  lines <- manyTill anyChar (endOfLine >> string ">> ")
+  let text = T.pack lines
+  -- manyTill already ate the empty line that should be here
 
   -- >> %comment%
-  string ">> "
-  comment <- pLine
-  endOfLine
+  -- manyTill already ate the ">> "
+  lines <- manyTill anyChar (endOfLine >> endOfLine)
+  let comment = T.pack lines
 
-  -- extra newline at the end
-  endOfLine
+  -- two newlines here were eaten by manyTill
 
   return $ Bookmark text comment
 
