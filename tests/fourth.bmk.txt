@@ -1,0 +1,55 @@
+﻿# Cool Reader 3 - exported bookmarks
+# file name: 1. A Test Case.epub
+# file path: /sdcard/Books/An Author/1. A Test Case.epub
+# book title: A Test Case
+# author: An Author
+# series: 
+
+## 0.04% - comment
+## 
+<< here comes the ordinary comment
+>> 
+
+## 0.22% - comment
+## PROLOGUE
+<< here comes the
+multiline
+comment
+>> 
+
+## 0.22% - comment
+## PROLOGUE
+<< this one got an ordinary text
+>> but
+exceptionally
+long
+comment
+
+## 0.26% - comment
+## PROLOGUE
+<< and
+this
+one
+got
+long
+body
+>> but a short comment
+
+## 0.31% - comment
+## PROLOGUE
+<< now,
+this
+one
+here,
+it
+got
+it
+all
+>> and
+a
+long
+comment
+to
+the
+load
+
