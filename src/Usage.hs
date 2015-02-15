@@ -20,6 +20,7 @@ usage = mode
       _strip                = False
     , _stripChars           = ""
     , _stripCharsAdditional = ""
+    , _zero_terminated      = False
     , _help                 = False
     , _version              = False
     , _files                = []
@@ -40,6 +41,10 @@ usage = mode
       (\chars args -> Right $ (stripCharsAdditional .~ T.pack chars) args)
       "CHARS"
       "Characters to strip, in addition to the default ones"
+  , flagNone
+      ["zero-terminated", "z"]
+      (zero_terminated .~ True)
+      "Delimit records with NUL, not newline"
 
   , flagNone
       ["help", "h"]

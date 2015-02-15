@@ -34,11 +34,12 @@ main = do
     (process
       (args^.strip)
       (args^.stripChars)
-      (args^.stripCharsAdditional))
+      (args^.stripCharsAdditional)
+      (args^.zero_terminated))
     (map T.unpack $ args^.files)
 
-process :: Bool -> T.Text -> T.Text -> FilePath -> IO ()
-process do_strip specific additional path = do
+process :: Bool -> T.Text -> T.Text -> Bool -> FilePath -> IO ()
+process do_strip specific additional zero_terminated path = do
   file <- TIO.readFile path
   case parseOnly pBookmarksFile file of
     Left err -> print err
@@ -46,7 +47,12 @@ process do_strip specific additional path = do
       let chars = if T.null specific
           then charsToStrip ++ T.unpack additional
           else T.unpack specific
-      forM_ res $ print . (if do_strip then stripchars chars else id)
+      forM_ res $ printOut . (if do_strip then stripchars chars else id)
+
+  where
+    printOut = if zero_terminated
+      then \x -> putStr $ (show x) ++ "\0"
+      else print
 
 stripchars :: [Char] -> Bookmark -> Bookmark
 stripchars chars = over text (T.dropAround (`elem` chars))

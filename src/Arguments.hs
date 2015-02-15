@@ -6,6 +6,7 @@ module Arguments (
 , strip
 , stripChars
 , stripCharsAdditional
+, zero_terminated
 , help
 , version
 , files
@@ -18,6 +19,7 @@ data Arguments = Arguments {
     _strip                :: Bool
   , _stripChars           :: T.Text
   , _stripCharsAdditional :: T.Text
+  , _zero_terminated      :: Bool
   , _help                 :: Bool
   , _version              :: Bool
   , _files                :: [T.Text]
