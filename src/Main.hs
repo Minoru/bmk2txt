@@ -11,6 +11,7 @@ import qualified Data.Version as V
 
 import Arguments
 import Bookmark
+import ExitCodes
 import Parsers
 import Usage
 import qualified Paths_bmk2txt as P
@@ -42,7 +43,9 @@ process :: Bool -> T.Text -> T.Text -> Bool -> FilePath -> IO ()
 process do_strip specific additional zero_terminated path = do
   file <- TIO.readFile path
   case parseOnly pBookmarksFile file of
-    Left err -> print err
+    Left err -> do
+      print err
+      exitWith errParseFail
     Right res -> do
       let chars = if T.null specific
           then charsToStrip ++ T.unpack additional
