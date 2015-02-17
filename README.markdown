@@ -1,4 +1,4 @@
-bmk2txt is a converter from CoolReader's bookmark files to simple text files
+bmk2txt is a converter from CoolReader's bookmark files to plain text files
 
 (I avoid saying "plain text" because bookmark files *are* in fact plain text.)
 

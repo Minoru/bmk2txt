@@ -25,7 +25,7 @@ usage = mode
     , _version              = False
     , _files                = []
     }
-  "Convert CoolReader's bookmark files to simple text files"
+  "Convert CoolReader's bookmark files to plain text files"
   (flagArg (\f args -> Right $ over files ((T.pack f) : ) args) "FILE ...")
   [ flagNone
       ["strip", "s"]
